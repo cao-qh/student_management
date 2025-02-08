@@ -1,22 +1,66 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
-  </head>
-  <body>
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    班级列表
-    <script src="" async defer></script>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="top">
+      <div class="tool">
+          <div class="class-info">
+              <form method="get" action="{% url 'grades_list' %}">
+                  <span>班级名称:</span>
+                  <input type="text" name="search" placeholder="搜索班级名称..." value="">
+                  <input type="submit" value="搜索">
+                  <a href="/grades/create/">
+                      <button type="button" class="add">新增</button>
+                  </a>
+              </form>
+          </div>
+      </div>
+  </div>
+  <div class="bottom">
+  <table>
+      <thead>
+          <tr>
+              <th>班级名称</th>
+              <th>班级编号</th>
+              <th>操作</th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for grade in grades %}
+          <tr>
+              <td>{{ grade.grade_name }}</td>
+              <td>{{ grade.grade_number }}</td>
+              <td>
+                  <a href="#">
+                      <button class="add">编辑</button>
+                  </a>
+                  <a href="#">
+                      <button class="del">删除</button>
+                  </a>
+              </td>
+          </tr>
+        {% endfor %}     
+      </tbody>
+  </table>
+
+  <!-- 分页导航 -->
+  <div class="pagination">
+      <span class="step-links">
+          <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo;首页</a>
+                <a href="?page={{page_obj.previous_page_number}}">上一页</a>
+            {% endif %}        
+          </span>
+
+          <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+              <a href="?page={{page_obj.next_page_number}}">下一页</a>
+              <a href="?page={{page_obj.paginator.num_pages}}">尾页&raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+  </div>
+{% endblock %}
