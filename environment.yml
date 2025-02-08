@@ -1,0 +1,5 @@
+name: student_management
+dependencies:
+  - python=3.11.11
+  - pip:
+      - django==5.0.4
