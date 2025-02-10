@@ -1,0 +1,26 @@
+{% load static %} 
+
+<link rel="stylesheet" href="{% static 'css/form.css' %}" />
+<div class="container">
+  {% if student.pk %}
+    <h2>编辑学生信息</h2>
+  {% else %}
+    <h2>添加学生信息</h2>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+      {{ field }}
+      {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="handleButton">
+      <button type="submit" id="saveButton">保存</button>
+      <button type="button" id="cancelButton" onclick="window.parent.Swal.close()">取消</button>
+    </div>
+  </form>
+</div>
