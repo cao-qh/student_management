@@ -1,5 +1,6 @@
 from django.views.generic import ListView,CreateView,UpdateView
 from django.db.models import Q
+from django.urls import reverse_lazy
 
 from .models import Grade
 from .forms import GradeForm
@@ -10,7 +11,7 @@ class GradeListView(ListView):
     template_name = 'grades/grades_list.html'
     fields = ['grade_name', 'grade_number']
     context_object_name = 'grades'
-    paginate_by = 1
+    paginate_by = 5
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -26,6 +27,7 @@ class GradeCreateView(CreateView):
     model = Grade
     template_name = 'grades/grade_form.html'
     form_class = GradeForm
+    success_url = reverse_lazy('grades_list')
 
 class GradeUpdateView(UpdateView):
     pass
