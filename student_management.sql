@@ -11,7 +11,7 @@
  Target Server Version : 80404 (8.4.4)
  File Encoding         : 65001
 
- Date: 10/02/2025 09:47:39
+ Date: 10/02/2025 17:00:47
 */
 
 SET NAMES utf8mb4;
@@ -63,7 +63,7 @@ CREATE TABLE `auth_permission`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `auth_permission_content_type_id_codename_01ab375a_uniq`(`content_type_id` ASC, `codename` ASC) USING BTREE,
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of auth_permission
@@ -96,6 +96,10 @@ INSERT INTO `auth_permission` VALUES (25, 'Can add 班级', 7, 'add_grade');
 INSERT INTO `auth_permission` VALUES (26, 'Can change 班级', 7, 'change_grade');
 INSERT INTO `auth_permission` VALUES (27, 'Can delete 班级', 7, 'delete_grade');
 INSERT INTO `auth_permission` VALUES (28, 'Can view 班级', 7, 'view_grade');
+INSERT INTO `auth_permission` VALUES (29, 'Can add student', 8, 'add_student');
+INSERT INTO `auth_permission` VALUES (30, 'Can change student', 8, 'change_student');
+INSERT INTO `auth_permission` VALUES (31, 'Can delete student', 8, 'delete_student');
+INSERT INTO `auth_permission` VALUES (32, 'Can view student', 8, 'view_student');
 
 -- ----------------------------
 -- Table structure for auth_user
@@ -196,7 +200,7 @@ CREATE TABLE `django_content_type`  (
   `model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `django_content_type_app_label_model_76bd3d3b_uniq`(`app_label` ASC, `model` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of django_content_type
@@ -208,6 +212,7 @@ INSERT INTO `django_content_type` VALUES (4, 'auth', 'user');
 INSERT INTO `django_content_type` VALUES (5, 'contenttypes', 'contenttype');
 INSERT INTO `django_content_type` VALUES (7, 'grades', 'grade');
 INSERT INTO `django_content_type` VALUES (6, 'sessions', 'session');
+INSERT INTO `django_content_type` VALUES (8, 'students', 'student');
 
 -- ----------------------------
 -- Table structure for django_migrations
@@ -219,7 +224,7 @@ CREATE TABLE `django_migrations`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of django_migrations
@@ -243,6 +248,7 @@ INSERT INTO `django_migrations` VALUES (16, 'auth', '0011_update_proxy_permissio
 INSERT INTO `django_migrations` VALUES (17, 'auth', '0012_alter_user_first_name_max_length', '2025-02-08 07:13:44.893770');
 INSERT INTO `django_migrations` VALUES (18, 'sessions', '0001_initial', '2025-02-08 07:13:44.943262');
 INSERT INTO `django_migrations` VALUES (19, 'grades', '0001_initial', '2025-02-08 09:59:07.951494');
+INSERT INTO `django_migrations` VALUES (20, 'students', '0001_initial', '2025-02-10 08:31:01.653066');
 
 -- ----------------------------
 -- Table structure for django_session
@@ -278,10 +284,35 @@ CREATE TABLE `grade`  (
 -- ----------------------------
 -- Records of grade
 -- ----------------------------
-INSERT INTO `grade` VALUES (1, '1年2班', 'x101');
+INSERT INTO `grade` VALUES (1, '1年2班', 'x102');
 INSERT INTO `grade` VALUES (2, '1年3班', 'x0103');
 INSERT INTO `grade` VALUES (3, '1年6班', 'x0106');
 INSERT INTO `grade` VALUES (4, '1年7班', 'x0107');
-INSERT INTO `grade` VALUES (5, '1年5班', 'x0105');
+
+-- ----------------------------
+-- Table structure for students_student
+-- ----------------------------
+DROP TABLE IF EXISTS `students_student`;
+CREATE TABLE `students_student`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `student_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `student_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `gender` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `birthday` date NOT NULL,
+  `contact_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `grade_id` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `student_number`(`student_number` ASC) USING BTREE,
+  UNIQUE INDEX `user_id`(`user_id` ASC) USING BTREE,
+  INDEX `students_student_grade_id_37795273_fk_grade_id`(`grade_id` ASC) USING BTREE,
+  CONSTRAINT `students_student_grade_id_37795273_fk_grade_id` FOREIGN KEY (`grade_id`) REFERENCES `grade` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `students_student_user_id_56286dbb_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of students_student
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
