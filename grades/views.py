@@ -1,4 +1,4 @@
-from django.views.generic import ListView,CreateView,UpdateView
+from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 from django.db.models import Q
 from django.urls import reverse_lazy
 
@@ -33,4 +33,9 @@ class GradeUpdateView(UpdateView):
     model = Grade
     template_name = 'grades/grade_form.html'
     form_class = GradeForm
+    success_url = reverse_lazy('grades_list')
+
+class GradeDeleteView(DeleteView):
+    model = Grade
+    template_name = 'grades/grade_delete_confirm.html'
     success_url = reverse_lazy('grades_list')
