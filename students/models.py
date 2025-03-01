@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from grades.models import Grade
 
 GENDER_CHOICES = {
-  ('M', 'Male'),
-  ('F', 'Female')
+  ('M', '男'),
+  ('F', '女')
 }
 
 # Create your models here.
@@ -26,7 +26,7 @@ class Student(models.Model):
   def __str__(self):
     return self.user.username
   
-  class Meata:
+  class Meta:
     db_table= 'student'
     verbose_name = '学生信息'
     verbose_name_plural = '学生信息'
