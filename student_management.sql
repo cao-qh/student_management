@@ -11,7 +11,7 @@
  Target Server Version : 80404 (8.4.4)
  File Encoding         : 65001
 
- Date: 10/02/2025 17:00:47
+ Date: 01/03/2025 21:33:54
 */
 
 SET NAMES utf8mb4;
@@ -119,12 +119,13 @@ CREATE TABLE `auth_user`  (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of auth_user
 -- ----------------------------
 INSERT INTO `auth_user` VALUES (1, 'pbkdf2_sha256$720000$Vi9X3kURHv0beAPrVn3Bed$UDxPnQ+FJqf9QAdm1/nwYVHjKBpxMKNuFOZTn0Lqcgs=', '2025-02-09 09:41:40.590246', 1, 'admin', '', '', 'admin@qq.com', 1, 1, '2025-02-08 07:25:38.134513');
+INSERT INTO `auth_user` VALUES (2, 'pbkdf2_sha256$720000$Up55p38G2ead09BnR9yJZF$fB5aaA58RWKSboygOxBvKFubUt5Onc31+YjQbXsdlWk=', NULL, 0, '张三_x123456789123456789', '', '', '', 0, 1, '2025-03-01 13:22:30.687714');
 
 -- ----------------------------
 -- Table structure for auth_user_groups
@@ -224,7 +225,7 @@ CREATE TABLE `django_migrations`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of django_migrations
@@ -249,6 +250,8 @@ INSERT INTO `django_migrations` VALUES (17, 'auth', '0012_alter_user_first_name_
 INSERT INTO `django_migrations` VALUES (18, 'sessions', '0001_initial', '2025-02-08 07:13:44.943262');
 INSERT INTO `django_migrations` VALUES (19, 'grades', '0001_initial', '2025-02-08 09:59:07.951494');
 INSERT INTO `django_migrations` VALUES (20, 'students', '0001_initial', '2025-02-10 08:31:01.653066');
+INSERT INTO `django_migrations` VALUES (21, 'students', '0002_alter_student_gender', '2025-03-01 08:33:16.320854');
+INSERT INTO `django_migrations` VALUES (22, 'students', '0003_alter_student_options_alter_student_table', '2025-03-01 08:33:16.351887');
 
 -- ----------------------------
 -- Table structure for django_session
@@ -290,10 +293,10 @@ INSERT INTO `grade` VALUES (3, '1年6班', 'x0106');
 INSERT INTO `grade` VALUES (4, '1年7班', 'x0107');
 
 -- ----------------------------
--- Table structure for students_student
+-- Table structure for student
 -- ----------------------------
-DROP TABLE IF EXISTS `students_student`;
-CREATE TABLE `students_student`  (
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE `student`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `student_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `student_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -309,10 +312,11 @@ CREATE TABLE `students_student`  (
   INDEX `students_student_grade_id_37795273_fk_grade_id`(`grade_id` ASC) USING BTREE,
   CONSTRAINT `students_student_grade_id_37795273_fk_grade_id` FOREIGN KEY (`grade_id`) REFERENCES `grade` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `students_student_user_id_56286dbb_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of students_student
+-- Records of student
 -- ----------------------------
+INSERT INTO `student` VALUES (1, 'x123456789123456789', '张三', 'M', '2020-05-01', '13812345678', '北京', 1, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,6 +1,7 @@
 {% load static %} 
 
 <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/sweetalert2.css' %}" />
 <div class="container">
   {% if student.pk %}
     <h2>编辑学生信息</h2>
@@ -25,8 +26,51 @@
   </form>
 </div>
 
+<script src="{% static 'js/sweetalert2.js' %}"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    
+    const form = document.querySelector('form')
+    const url= "{% url 'student_create' %}"
+    form.addEventListener('submit',function(e){
+      e.preventDefault()
+      let formData = new FormData(form)
+      // 使用fetch发送请求
+      fetch(url,{
+        method: 'POST',
+        body:formData,
+        headers:{
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+      }).then(response=>response.json())
+      .then(data=>{
+        if(data.status==='success'){
+          Swal.fire({
+            icon:'success',
+            title:data.messages,
+            text:'数据已完成提交'
+          })
+        }else{
+          // 解析嵌套的JSON字符串
+          const errors = JSON.parse(data.message)
+          // 构建错误信息文本
+          let errorMessage = ''
+          for(const field in errors){
+            if(errors.hasOwnProperty(field)){
+              errors[field].forEach(error=>{
+                errorMessage += `<li style="color:red;text-align:left;margin-left"100px;>${error.message}</li>`
+              })
+            }
+          }
+          // 使用SweetAlert2 显示错误信息
+          Swal.fire({
+            icon:'error',
+            title:'提交错误',
+            html:errorMessage,
+            confirmButtonText:'关闭'
+          })
+        }
+      })
+    })
   })
 </script>
