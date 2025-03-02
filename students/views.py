@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView,CreateView
+from django.views.generic import ListView,CreateView,UpdateView
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
@@ -48,3 +48,8 @@ class StudentCreateView(CreateView):
       'status':'error',
       'message':errors,
     },status=400)
+    
+class StudentUpdateView(UpdateView):
+  model = Student
+  template_name = 'students/student_form.html'
+  form_class = StudentForm

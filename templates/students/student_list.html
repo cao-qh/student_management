@@ -46,6 +46,7 @@
       </tr>
     </thead>
     <tbody>
+      {% for student in students %}
       <tr>
         <td><input type="checkbox" name="student_ids" value="48" /></td>
         <td>张亮</td>
@@ -67,28 +68,7 @@
           >
         </td>
       </tr>
-
-      <tr>
-        <td><input type="checkbox" name="student_ids" value="51" /></td>
-        <td>张欣</td>
-        <td>1年1班</td>
-        <td>G562717201110265132</td>
-        <td>F</td>
-        <td>2011年10月26日</td>
-        <td>13672259986</td>
-        <td>
-          <a
-            href="http://127.0.0.1:8000/students/51/update/"
-            class="btn btn-primary btn-sm edit"
-            >编辑</a
-          >
-          <a
-            href="http://127.0.0.1:8000/students/51/delete/"
-            class="btn btn-danger btn-sm del"
-            >删除</a
-          >
-        </td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
 
