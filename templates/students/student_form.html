@@ -26,6 +26,14 @@
   </form>
 </div>
 
+{% if student.pk %}
+<script>
+  var actionUrl = "{% url 'student_update'  student.pk %}"
+</script>
+{% else %}
+
+{% endif %}
+
 <script src="{% static 'js/sweetalert2.js' %}"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {

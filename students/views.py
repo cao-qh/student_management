@@ -53,3 +53,24 @@ class StudentUpdateView(UpdateView):
   model = Student
   template_name = 'students/student_form.html'
   form_class = StudentForm
+  
+  def form_valid(self,form):
+    # 获取学生对象实例
+    student = form.save(commit=False)
+    # 检查一个是否修改了student_name和student_number
+    if 'student_name' or 'student_number' in form.changed_data:
+      student.user.username = form.cleaned_data.get('student_name') + '_' + form.cleaned_data.get('student_number')
+      student.user.password= form.cleaned_data.get('student_number')[-6:]
+      student.user.save() # 保存更改的用户模型
+      
+    # 保存student模型
+    student.save()
+    
+    # 返回json响应
+    return JsonResponse({
+      'status':'success',
+      'message':'操作成功'
+    },status=200)
+  
+  def form_invalid(self,form):
+    pass
