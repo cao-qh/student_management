@@ -11,7 +11,7 @@
  Target Server Version : 80041
  File Encoding         : 65001
 
- Date: 02/03/2025 23:23:37
+ Date: 08/03/2025 23:56:17
 */
 
 SET NAMES utf8mb4;
@@ -125,8 +125,9 @@ CREATE TABLE `auth_user`  (
 -- Records of auth_user
 -- ----------------------------
 INSERT INTO `auth_user` VALUES (1, 'pbkdf2_sha256$720000$Vi9X3kURHv0beAPrVn3Bed$UDxPnQ+FJqf9QAdm1/nwYVHjKBpxMKNuFOZTn0Lqcgs=', '2025-02-09 09:41:40.590246', 1, 'admin', '', '', 'admin@qq.com', 1, 1, '2025-02-08 07:25:38.134513');
-INSERT INTO `auth_user` VALUES (2, 'pbkdf2_sha256$720000$Up55p38G2ead09BnR9yJZF$fB5aaA58RWKSboygOxBvKFubUt5Onc31+YjQbXsdlWk=', NULL, 0, '张三_x123456789123456789', '', '', '', 0, 1, '2025-03-01 13:22:30.687714');
+INSERT INTO `auth_user` VALUES (2, 'pbkdf2_sha256$720000$RdyrfZ2ZJYFNWDQidB4BS4$0IUodiln0a83J1gRNgO05bkk8UMOSs9D1gZwAZJiXK0=', NULL, 0, '张三丰_x123456789123111111', '', '', '', 0, 1, '2025-03-01 13:22:30.687714');
 INSERT INTO `auth_user` VALUES (3, 'pbkdf2_sha256$720000$9iBMhAuswd4D8DFzwhFH9H$8fd2j7ZPlemyA3fZKdsnUP+r6KbcT7mS1eQf5+GzwR4=', NULL, 0, '李四_x123456789012345678', '', '', '', 0, 1, '2025-03-02 15:01:34.281759');
+INSERT INTO `auth_user` VALUES (4, 'pbkdf2_sha256$720000$TpQI0vo93tUtZJveIFetq8$iL9S6Mw/KxyF2E0gkr394H/65J3mOvzQMUy4z2E0oFY=', NULL, 0, '张三_x123456789123456789', '', '', '', 0, 1, '2025-03-08 15:55:07.775284');
 
 -- ----------------------------
 -- Table structure for auth_user_groups
@@ -313,12 +314,10 @@ CREATE TABLE `student`  (
   INDEX `students_student_grade_id_37795273_fk_grade_id`(`grade_id`) USING BTREE,
   CONSTRAINT `students_student_grade_id_37795273_fk_grade_id` FOREIGN KEY (`grade_id`) REFERENCES `grade` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `students_student_user_id_56286dbb_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, 'x123456789123456789', '张三', 'M', '2020-05-01', '13812345678', '北京', 1, 2);
-INSERT INTO `student` VALUES (2, 'x123456789012345678', '李四', 'M', '2020-05-01', '18912345678', '长春', 3, 3);
 
 SET FOREIGN_KEY_CHECKS = 1;

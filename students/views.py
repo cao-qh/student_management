@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView,CreateView,UpdateView
+from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.urls import reverse_lazy
 
 from .models import Student
 from .forms import StudentForm
@@ -60,7 +62,7 @@ class StudentUpdateView(UpdateView):
     # 检查一个是否修改了student_name和student_number
     if 'student_name' or 'student_number' in form.changed_data:
       student.user.username = form.cleaned_data.get('student_name') + '_' + form.cleaned_data.get('student_number')
-      student.user.password= form.cleaned_data.get('student_number')[-6:]
+      student.user.password= make_password(form.cleaned_data.get('student_number')[-6:])
       student.user.save() # 保存更改的用户模型
       
     # 保存student模型
@@ -73,4 +75,27 @@ class StudentUpdateView(UpdateView):
     },status=200)
   
   def form_invalid(self,form):
-    pass
+    errors = form.errors.as_json()
+    return JsonResponse({
+      'status':'error',
+      'message':errors,
+    },status=400)
+    
+class StudentDeleteView(DeleteView):
+  success_url = reverse_lazy('student_list')
+  model = Student
+  
+  def delete(self,request,*args,**kwargs):
+    self.object = self.get_object()
+    
+    try:
+      self.object.delete()
+      return JsonResponse({
+        'status':'success',
+        'message':'删除成功'
+      },status=200)
+    except Exception as e:
+      return JsonResponse({
+        'status':'error',
+        'message':'删除失败：'+ str(e)
+      },status=500)
