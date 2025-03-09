@@ -101,7 +101,7 @@
   document.querySelectorAll(".edit").forEach(function (button) {
     button.addEventListener("click", function (e) {
       e.preventDefault() // 阻止跳转
-      url = this.getAttribute('href')
+      url = this.getAttribute("href")
       Swal.fire({
         position: "top-end",
         html: `<iframe src="${url}" width="100%" height="800px" frameborder="0"></iframe>`,
@@ -115,36 +115,106 @@
   document.querySelectorAll(".btn-danger").forEach(function (button) {
     button.addEventListener("click", function (e) {
       e.preventDefault() // 阻止跳转
-      url = this.getAttribute('href')
+      url = this.getAttribute("href")
       Swal.fire({
-       title:'确认删除？',
-       icon:'warning',
-       showCancelButton:true,
-       confirmButtonText:'删除',
-       cancelButtonColor:'#d33',
-      }).then(result=>{
-        if(result.isConfirmed){
+        title: "确认删除？",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "删除",
+        cancelButtonColor: "#d33",
+      }).then((result) => {
+        if (result.isConfirmed) {
           // 向后台发送数据
-          fetch(url,{
-            method:'DELETE',
-            headers:{
-              'X-Requested-With':'XMLHttpRequest',
-              'X-CSRFToken':'{{ csrf_token }}'
-            }
+          fetch(url, {
+            method: "DELETE",
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
           })
-          .then(response=>response.json())
-          .then(data=>{
-            if(data.status==='success'){
-              Swal.fire('Deleted',data.messages,'success')
-              window.location.reload()
-            }else{
-              Swal.fire('Error!',data.messages,'error')
-            }
-          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                Swal.fire("Deleted", data.messages, "success")
+                window.location.reload()
+              } else {
+                Swal.fire("Error!", data.messages, "error")
+              }
+            })
         }
       })
     })
   })
+</script>
+
+<script>
+  // 选中所有学生
+  document.addEventListener("DOMContentLoaded", function () {
+    // 获取权限复选框元素
+    const selectAllCheckbox = document.getElementById("select-all")
+
+    // 监听全选复选框的点击事件
+    selectAllCheckbox.addEventListener("change", function () {
+      // 获取所有name为'student_ids' 的复选框元素
+      const checkboxes = document.querySelectorAll('input[name="student_ids"]')
+
+      // 遍历复选框元素，并根据全选复选框的状态进行选中或取消选中
+      checkboxes.forEach(function (checkbox) {
+        checkbox.checked = selectAllCheckbox.checked
+      })
+    })
+  })
+
+  // 批量删除
+  document.getElementById("del-all").onclick = function () {
+    // 是否有学生被选择
+    const checkboxes = document.querySelectorAll(
+      'input[name="student_ids"]:checked'
+    )
+    if (checkboxes.length === 0) {
+      Swal.fire({
+        title: "错误",
+        text: "请选择要删除的学生信息",
+        icon: "error",
+        confirmButtonText: "确定",
+      })
+      return
+    }
+    // 如果有被选中，则fetch发送请求
+    Swal.fire({
+      title: "确认删除选中的数据？",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "删除",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 创建一个表单对象
+        const formData = new FormData()
+        // 遍历所有选择的数据
+        checkboxes.forEach((checkbox) => {
+          formData.append("student_ids", checkbox.value)
+        })
+        fetch("{% url 'student_bulk_delete' %}", {
+          method: "POST",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              Swal.fire("Deleted", data.messages, "success")
+              window.location.reload()
+            } else {
+              Swal.fire("Error!", data.messages, "error")
+            }
+          })
+      }
+    })
+  }
 </script>
 
 {% endblock %}
