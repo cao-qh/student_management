@@ -35,8 +35,8 @@ class WriteExcel:
         self.workbook.save(self.file_path)
 
 if __name__ == "__main__":
-    # read_excel_obj = ReadExcel(str(BASE_DIR / "students.xlsx"))
-    # result = read_excel_obj.get_data()
-    # print(result)
-    write_excel_obj = WriteExcel()
-    write_excel_obj.write_to_excel()
+    read_excel_obj = ReadExcel(str(BASE_DIR / "students.xlsx"))
+    result = read_excel_obj.get_data()
+    print(result)
+    # write_excel_obj = WriteExcel()
+    # write_excel_obj.write_to_excel()

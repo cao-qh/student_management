@@ -74,16 +74,26 @@
     </tbody>
   </table>
 
+  <!-- 分页导航 -->
   <div class="pagination">
     <span class="step-links">
-      <span class="step-links">
-        <span class="current"> 1 / 2 </span>
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+              <a href="?page=1">&laquo;首页</a>
+              <a href="?page={{page_obj.previous_page_number}}">上一页</a>
+          {% endif %}        
+        </span>
 
-        <a href="http://127.0.0.1:8000/students/?page=2">下一页</a>
-        <a href="http://127.0.0.1:8000/students/?page=2">尾页 »</a>
-      </span>
+        <span class="current">
+          {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{page_obj.next_page_number}}">下一页</a>
+            <a href="?page={{page_obj.paginator.num_pages}}">尾页&raquo;</a>
+        {% endif %}
     </span>
-  </div>
+</div>
 </div>
 
 <script>
@@ -215,6 +225,55 @@
       }
     })
   }
+
+  // 导入
+  document.getElementById('import').addEventListener('click',function(){
+    Swal.fire({
+      title: '上传学生信息Excel',
+      input:'file',
+      inputAttributes:{
+        'accept':'.xlsx',
+        'aria-label':'Upload your Excel file'
+      },
+      showCancelButton:true,
+      confirmButtonText:'上传',
+      showLoaderOnConfirm:true,
+      preConfirm:(file)=>{
+        // 处理文件上传的逻辑，例如使用FormData 和 Fetch API 上传文件
+        const formData = new FormData();
+        formData.append('excel_file',file);
+
+        return fetch('{% url "upload_student" %}',{
+          method:'POST',
+          headers:{
+            'X-CSRFToken':'{{csrf_token}}'
+          },
+          body:formData
+        })
+        .then(response=>response.json())
+        .then(data=>{
+          if(data.status === 'error'){
+            throw new Error(data.message)
+          }
+        })
+        .catch(error=>{
+          console.log(error)
+          Swal.showValidationMessage(`${ error.message || error }`)
+        })
+      },
+      allowOutsideClick:()=>!Swal.isLoading()
+    }).then((result)=>{
+      if(result.isConfirmed){
+        Swal.fire({
+          title:'成功',
+          text:'文件上传成功',
+          icon:'success'
+        })
+        window.location.reload()
+      }
+    })
+  })
+
 </script>
 
 {% endblock %}
