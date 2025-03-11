@@ -7,7 +7,7 @@
         <select name="grade">
           <option value selected>请选择班级</option>
           {% for grade in grades %}
-          <option value="{{ grade.pk}}">{{ grade.grade_name }}</option>
+          <option value="{{ grade.pk}}" {% if grade.pk|stringformat:"s" == current_grade %} selected {% endif %}>{{ grade.grade_name }}</option>
           {% endfor %}
         </select>
         <span>姓名/学号:</span>
