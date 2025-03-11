@@ -291,54 +291,54 @@
       showCancelButton: true,
       confirmButtonText: "确定",
       cancelButtonText: "取消",
-    }).then(result=>{
+    }).then((result) => {
       if (result.isConfirmed) {
         // 发送请求
-        fetch('{% url "export_excel" %}',{
-          method: 'POST',
+        fetch('{% url "export_excel" %}', {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
           },
           body: JSON.stringify({
-            grade: value
-          })
+            grade: value,
+          }),
         })
-        .then(response=>{
-          if(!response.ok){
-            response.json().then(result=>{
-              Swal.file({
-                title:'下载失败',
-                text:'服务器错误：'+result.message,
-                icon:'error',
-                confirmButtonText:'关闭'
+          .then((response) => {
+            if (!response.ok) {
+              response.json().then((result) => {
+                Swal.file({
+                  title: "下载失败",
+                  text: "服务器错误：" + result.message,
+                  icon: "error",
+                  confirmButtonText: "关闭",
+                })
               })
-            })
-            throw new Error('服务器错误')
-          }
-          return response.blob()
-        })
-        .then(blob=>{
-          const url = window.URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.style.display = 'none'
-          a.href = url
-          a.download = gradeText + '.xlsx'
-          document.body.appendChild(a)
-          a.click()
-          // 清理并移除元素
-          document.body.removeChild(a)
-          window.URL.revokeObjectURL(url)
-        })
-        .catch(error=>{
-          console.error('下载失败',error)
-          Swal.fire({
-            title: "错误",
-            text: "下载出现问题，请稍后再试",
-            icon:'error',
-            confirmButtonText: '确定'
+              throw new Error("服务器错误")
+            }
+            return response.blob()
           })
-        })
+          .then((blob) => {
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.style.display = "none"
+            a.href = url
+            a.download = gradeText + ".xlsx"
+            document.body.appendChild(a)
+            a.click()
+            // 清理并移除元素
+            document.body.removeChild(a)
+            window.URL.revokeObjectURL(url)
+          })
+          .catch((error) => {
+            console.error("下载失败", error)
+            Swal.fire({
+              title: "错误",
+              text: "下载出现问题，请稍后再试",
+              icon: "error",
+              confirmButtonText: "确定",
+            })
+          })
       }
     })
   })

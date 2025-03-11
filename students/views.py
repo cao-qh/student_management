@@ -9,6 +9,8 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
+from django.db.models  import Q
+
 import openpyxl
 
 from .models import Student
@@ -23,6 +25,19 @@ class StudentListView(ListView):
     template_name = "students/student_list.html"
     context_object_name = "students"
     paginate_by = 10
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        grade_id= self.request.GET.get('grade')# 获取班级
+        keyword = self.request.GET.get('search')# 获取搜索的内容
+        if grade_id:
+            queryset = queryset.filter(grade_id=grade_id)
+        if keyword:
+            queryset = queryset.filter(
+                Q(student_number=keyword) | 
+                Q(student_name=keyword)
+            )
+        return queryset
     
     def get_context_data(self):
         context = super().get_context_data()
