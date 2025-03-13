@@ -1,3 +1,17 @@
-from django.shortcuts import render
+from django.urls import reverse_lazy
 
-# Create your views here.
+from .models import Teacher
+
+
+class BaseTeacherView():
+    model = Teacher
+    success_url = reverse_lazy("teacher_list")
+
+class TeacherListView():
+    pass
+class TeacherCreateView():
+    pass
+class TeacherUpdateView():
+    pass
+class TeacherDeleteView():
+    pass

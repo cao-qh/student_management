@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+
+{% load url_utils %}
+
+{% block content %}
 <div class="top">
   <div class="tool">
     <div class="class-info">
@@ -72,8 +76,8 @@
     <span class="step-links">
       <span class="step-links">
         {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo;首页</a>
-        <a href="?page={{page_obj.previous_page_number}}">上一页</a>
+        <a href="?{% search_url request page=1 %}">&laquo;首页</a>
+        <a href="?{% search_url request page=page_obj.previous_page_number %}">上一页</a>
         {% endif %}
       </span>
 
@@ -82,8 +86,8 @@
       </span>
 
       {% if page_obj.has_next %}
-      <a href="?page={{page_obj.next_page_number}}">下一页</a>
-      <a href="?page={{page_obj.paginator.num_pages}}">尾页&raquo;</a>
+      <a href="?{% search_url request page=page_obj.next_page_number %}">下一页</a>
+      <a href="?{% search_url request page=page_obj.paginator.num_pages %}">尾页&raquo;</a>
       {% endif %}
     </span>
   </div>
