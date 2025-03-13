@@ -6,7 +6,7 @@ from .views import (
     TeacherDeleteView,
 )
 
-patterns = [
+urlpatterns = [
     path("", TeacherListView.as_view(), name="teacher_list"),
     path("teacher/create/", TeacherCreateView.as_view(), name="teacher_create"),
     path(
