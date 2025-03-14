@@ -19,8 +19,8 @@ class StudentForm(forms.ModelForm):
    
   def clean_student_number(self):
     student_number = self.cleaned_data.get('student_number')
-    if len(student_number) != 19:
-      raise ValidationError('学号长度应为19位。')
+    if len(student_number) != 9:
+      raise ValidationError('学号长度应为9位。')
     return student_number
   
   def clean_birthday(self):
