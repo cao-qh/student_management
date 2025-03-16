@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,30 +22,38 @@
         </a>
       </div>
       <div class="profile">
-          欢迎 [ admin ]
-          
+          欢迎 [ {{ request.session.username }} ]
+          {% if request.session.user_role == 'admin' %}
             管理员
-          
+          {% elif  request.session.user_role == 'student' %}
+            同学
+          {% else %}
+            老师
+          {% endif %}
       </div>
       <div class="content">
           <ul>
-            
+            {% if request.session.user_role == 'admin' %}
               <li class="active"><span class="iconfont icon-fangzi"></span>
                 <a href="/grades/" class="nav-link">班级管理</a>
               </li>
               <li class="active"><span class="iconfont icon-kapian"></span>
                 <a href="/teachers/">老师管理</a>
               </li>
-            
-            
+            {% endif %}
+            {% if request.session.user_role == 'admin' or request.session.user_role == 'teacher' %}
               <li><span class="iconfont icon-ren"></span>
                 <a href="/students/">学生管理</a>
               </li>
               <li><span class="iconfont icon-shuben"></span>
                 <a href="/scores/">成绩管理</a>
               </li>
-            
-            
+            {% endif %}
+            {% if request.session.user_role == 'student' %}
+              <li><span class="iconfont icon-bianji"></span>
+                <a href="{% url 'my_scores' %}">成绩列表</a>
+              </li>
+            {% endif %}
               <li><span class="iconfont icon-bianji"></span>
                 <a href="/change_password/">修改密码</a>
               </li>
@@ -57,12 +64,9 @@
       </div>
   </div>
 
-  
-<div class="right">
- {% block content %}
- {% endblock %}
-</div>
+  {% block content %}
 
+  {% endblock %}
 </div>
 </body>
 </html>    
