@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sweetalert2.css' %}" />
+    <script src="{% static 'js/sweetalert2.js' %}"></script>
+  </head>
+  <body>
+    <div
+      class="wrapper"
+      style="background-image: url('{% static 'images/loginpage.jpg' %}')"
+    >
+      <div class="title">大熊课堂<span>学生管理系统</span></div>
+      <div class="container">
+        <form action="#" method="post" id="loginForm">
+          <h2>登录</h2>
+          <div class="input-group">
+            <label for="role">选择身份:</label>
+            <div class="radio-group">
+              <input type="radio" id="admin" name="role" value="admin" />
+              <label for="admin">管理员</label>
+
+              <input type="radio" id="teacher" name="role" value="teacher" />
+              <label for="teacher">老师</label>
+
+              <input type="radio" id="student" name="role" value="student" />
+              <label for="student">学生</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="username">你的账号:</label>
+            <input type="text" id="username" name="username" required value />
+          </div>
+          <div class="input-group">
+            <label for="password">你的密码:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              value
+            />
+          </div>
+          <div class="input-group">
+            <input
+              type="checkbox"
+              id="remember"
+              name="remember"
+              class="custom-checkbox"
+            />
+            <label for="remember">记住我的密码</label>
+          </div>
+          <button type="button" onclick="submitLogin()">登 录</button>
+          <p class="forget">忘记密码了？请点击!!!</p>
+        </form>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function updateLabels() {
+      var selectedRoleRadio = document.querySelector(
+        'input[name="role"]:checked'
+      )
+      var usernameLabel = document.querySelector('label[for="username"]')
+      var passwordLabel = document.querySelector('label[for="password"]')
+
+      if (selectedRoleRadio) {
+        var selectedRole = selectedRoleRadio.value
+        switch (selectedRole) {
+          case "admin":
+            usernameLabel.textContent = "用户名:"
+            passwordLabel.textContent = "密码:"
+            break
+          case "teacher":
+            usernameLabel.textContent = "手机号:"
+            passwordLabel.textContent = "密码:"
+            break
+          case "student":
+            usernameLabel.textContent = "学籍号:"
+            passwordLabel.textContent = "密码:"
+        }
+      } else {
+        // 当前没有单选按钮选中时，默认标签
+        usernameLabel.textContent = "你的账号:"
+        passwordLabel.textContent = "你的密码:"
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // 获取所有相关的单选按钮
+      var radios = document.querySelectorAll("input[type=radio][name=role]")
+
+      // 为每个单选按钮添加事件监听器
+      radios.forEach(function (radio) {
+        radio.addEventListener("change", updateLabels)
+      })
+    })
+
+    function submitLogin(){
+        // 执行验证如果未通过则停止执行
+        if(!validateForm()){
+            return
+        }
+        // 提交表单
+        var csrftoken = '{{ csrf_token }}'
+        // 获取表单元素
+        var formElement = document.getElementById('loginForm')
+        // 创建一个FormData对象
+        var formData = new FormData(formElement)
+        formData.append('csrfmiddlewaretoken', csrftoken)
+
+        fetch('/login/'{
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+    }
+  </script>
+</html>
